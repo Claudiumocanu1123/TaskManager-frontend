@@ -1,0 +1,254 @@
+/* ROOT */
+.root {
+    -fx-background-color: #0f172a; /* dark blue/black */
+    -fx-font-family: "Segoe UI", "Roboto", sans-serif;
+}
+
+/* TITLU */
+.label {
+    -fx-text-fill: #e2e8f0;
+    -fx-font-size: 14px;
+}
+
+#titleLabel {
+    -fx-text-fill: #38bdf8; /* cyan accent */
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+}
+
+/* TEXT FIELD */
+.text-field, .password-field {
+    -fx-background-color: #1e293b;
+    -fx-text-fill: #e2e8f0;
+    -fx-prompt-text-fill: #94a3b8;
+
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+
+    -fx-border-color: transparent;
+    -fx-padding: 10 15;
+}
+
+/* focus effect */
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #38bdf8;
+    -fx-border-width: 1.5;
+}
+
+/* BUTTON */
+.button {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+
+    -fx-background-radius: 12;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+
+    -fx-cursor: hand;
+    -fx-padding: 10 20;
+
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 5, 0, 0, 2);
+}
+
+/* hover effect */
+.button:hover {
+    -fx-background-color: #1d4ed8;
+}
+
+/* pressed */
+.button:pressed {
+    -fx-background-color: #1e40af;
+}
+
+/* REGISTER BUTTON (secondary) */
+#registerButton {
+    -fx-background-color: transparent;
+    -fx-text-fill: #38bdf8;
+    -fx-border-color: #38bdf8;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+#registerButton:hover {
+    -fx-background-color: rgba(56,189,248,0.1);
+}
+
+/* FACE ID BUTTON */
+#faceIdButton {
+    -fx-background-color: #10b981; /* green */
+}
+
+#faceIdButton:hover {
+    -fx-background-color: #059669;
+}
+
+/* MESSAGE LABEL */
+#messageLabel {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+/* CARD STYLE (pentru container) */
+.vbox {
+    -fx-background-color: #111827;
+    -fx-background-radius: 20;
+    -fx-padding: 30;
+    -fx-spacing: 15;
+
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 15, 0.2, 0, 5);
+}
+.combo-box {
+    -fx-background-color: #1e293b;
+    -fx-text-fill: #e2e8f0;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-border-color: transparent;
+    -fx-padding: 6 10;
+}
+
+.combo-box:focused {
+    -fx-border-color: #38bdf8;
+    -fx-border-width: 1.5;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #1e293b;
+    -fx-text-fill: #e2e8f0;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.combo-box .arrow {
+    -fx-background-color: #38bdf8;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: #111827;
+    -fx-border-color: #38bdf8;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: #111827;
+    -fx-text-fill: #e2e8f0;
+}
+
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: #1d4ed8;
+    -fx-text-fill: white;
+}
+
+.combo-box-popup .list-cell:filled:selected {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+}
+/* LISTVIEW - container principal */
+.list-view {
+    -fx-background-color: #1e293b;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: transparent;
+    -fx-padding: 5;
+}
+
+/* ListView cells (fiecare task) */
+.list-cell {
+    -fx-background-color: #1e293b;
+    -fx-text-fill: #e2e8f0;
+    -fx-font-size: 14px;
+    -fx-padding: 12 15;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #334155;
+}
+
+/* Alternating row colors (opțional) */
+.list-cell:odd {
+    -fx-background-color: #162236;
+}
+
+/* Hover pe task */
+.list-cell:hover {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+/* Task selectat */
+.list-cell:selected {
+    -fx-background-color: #38bdf8;
+    -fx-text-fill: #0f172a;
+    -fx-font-weight: bold;
+}
+
+/* ListView scrollbar */
+.list-view .scroll-bar:vertical {
+    -fx-background-color: #0f172a;
+    -fx-background-radius: 10;
+}
+
+.list-view .scroll-bar:vertical .thumb {
+    -fx-background-color: #2563eb;
+    -fx-background-radius: 10;
+}
+
+.list-view .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #38bdf8;
+}
+
+.list-view .scroll-bar:vertical .increment-button,
+.list-view .scroll-bar:vertical .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+}
+
+/* Buton Delete (secundar) - poți adăuga pentru delete task button */
+#deleteButton {
+    -fx-background-color: #dc2626; /* roșu */
+    -fx-text-fill: white;
+}
+
+#deleteButton:hover {
+    -fx-background-color: #b91c1c;
+}
+
+#deleteButton:pressed {
+    -fx-background-color: #991b1b;
+}
+
+/* Dialog styling (pentru editare task) */
+.dialog-pane {
+    -fx-background-color: #111827;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #1e293b;
+}
+
+.dialog-pane .content {
+    -fx-background-color: #111827;
+    -fx-text-fill: #e2e8f0;
+}
+
+.dialog-pane .button {
+    -fx-background-color: #2563eb;
+}
+
+.dialog-pane .button:hover {
+    -fx-background-color: #1d4ed8;
+}
+.button {
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #4a7dff;
+}
+
+.list-view {
+    -fx-background-radius: 10;
+}
