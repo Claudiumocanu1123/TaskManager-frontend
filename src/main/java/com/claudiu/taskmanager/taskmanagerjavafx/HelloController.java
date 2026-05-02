@@ -1,10 +1,18 @@
 package com.claudiu.taskmanager.taskmanagerjavafx;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.List;
 import java.util.Optional;
 
 public class HelloController {
@@ -21,6 +29,8 @@ public class HelloController {
     private Button EditTaskButton;
 
     private ObservableList<String> list = FXCollections.observableArrayList();
+    private HttpClient httpClient = HttpClient.newHttpClient();
+    private static final String API_URL = "http://localhost:8080/api/tasks";
 
     @FXML
     private void initialize() {
@@ -42,15 +52,47 @@ public class HelloController {
         EditTaskButton.disableProperty().bind(
                 listView.getSelectionModel().selectedItemProperty().isNull()
         );
+        loadTasksFromBackend();
+
+    }
+    private void loadTasksFromBackend() {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(API_URL))
+                .GET()
+                .build();
+        httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(HttpResponse::body)
+                .thenAccept(json -> {
+                    try{
+                        ObjectMapper mapper = new ObjectMapper();
+                        List<Task> tasksFromBackend = mapper.readValue(json,new TypeReference<List<Task>>() {});
+                        Platform.runLater(() -> {
+                            list.clear();
+                            for(Task task : tasksFromBackend) {
+                                list.add(task.getTitle());
+                            }
+                        });
+                    } catch(Exception e){
+                        e.printStackTrace();
+                    }
+                });
+
 
     }
     @FXML
     private void handleGoToTask() {
         String task = textField.getText().trim();
+        String title = textField.getText();
         if(!task.isEmpty()) {
             list.add(task);
             textField.clear();
         }
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(API_URL + "?title=" + title))
+                .POST(HttpRequest.BodyPublishers.noBody())
+                .build();
+        httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenRun(() -> loadTasksFromBackend());
     }
     @FXML
     private void handleGoToDelete() {
@@ -98,4 +140,6 @@ public class HelloController {
         }
 
     }
+
+
 }
