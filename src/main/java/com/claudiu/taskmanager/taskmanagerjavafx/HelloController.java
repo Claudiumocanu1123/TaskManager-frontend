@@ -53,7 +53,7 @@ public class HelloController {
         textField.setOnAction(e -> handleGoToTask());
         listView.setOnMouseClicked(event -> {
             if(event.getClickCount() == 2) {
-                handleGoToEdit();
+                textField.clear();
             }
         });
         listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -71,58 +71,81 @@ public class HelloController {
 
     }
     private void loadTasksFromBackend() {
+
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(API_URL))
                 .GET()
                 .build();
+
         httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
                 .thenAccept(json -> {
-                    try{
+                    System.out.println("JSON de la server: " + json);
+                    try {
                         ObjectMapper mapper = new ObjectMapper();
-                        List<Task> tasksFromBackend = mapper.readValue(json,new TypeReference<List<Task>>() {});
-                        Platform.runLater(() -> {
-                            list.clear();
-                            for(Task task : tasksFromBackend) {
-                                list.add(new Task(task.getId(), task.getTitle(), task.getDescription(), task.isCompleted()));
-                            }
-                        });
-                    } catch(Exception e){
+                        mapper.configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                        mapper.registerModule(new com.fasterxml.jackson.datatype.jsr310.JavaTimeModule());
+
+                        List<Task> tasksFromBackend =
+                                mapper.readValue(json, new TypeReference<List<Task>>() {});
+
+                        Platform.runLater(() -> list.setAll(tasksFromBackend));
+
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 });
-
-
     }
     @FXML
     private void handleGoToTask() {
         String task = textField.getText().trim();
         String title = textField.getText();
         String encodedTitle = URLEncoder.encode(title, StandardCharsets.UTF_8);
+        if(task.isEmpty())
+            return;
         if(!task.isEmpty()) {
             list.add(new Task(title,""));
             textField.clear();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(API_URL + "?title=" + encodedTitle))
+                    .POST(HttpRequest.BodyPublishers.noBody())
+                    .build();
+            httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenRun(() -> loadTasksFromBackend());
         }
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL + "?title=" + encodedTitle))
-                .POST(HttpRequest.BodyPublishers.noBody())
-                .build();
-        httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                .thenRun(() -> loadTasksFromBackend());
     }
     @FXML
     private void handleGoToDelete() {
         Task task = listView.getSelectionModel().getSelectedItem();
-        if(task != null) {
+        System.out.println("Task selectat: " + task.getTitle() + " | ID: " + task.getId());
+        if(task == null)
+        {
+            messageLabel.setText("Please select a task");
+            return;
+        }
+        Long id = task.getId();
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Task");
             alert.setHeaderText("Are you sure you want to delete this task?");
             alert.setContentText("This action cannot be undone");
             Optional<ButtonType> result = alert.showAndWait();
             if(result.isPresent() && result.get() == ButtonType.OK) {
-                list.remove(task);
+                HttpRequest httpRequest = HttpRequest.newBuilder()
+                        .uri(URI.create(API_URL + "/" + task.getId()))
+                        .DELETE()
+                        .build();
+                System.out.println("URL delete: " + httpRequest.uri());
+                httpClient.sendAsync(httpRequest, HttpResponse.BodyHandlers.ofString())
+                        .thenAccept(response ->
+                                Platform.runLater(() -> {
+                                    System.out.println("Status delete: " + response.statusCode());
+                                    list.remove(task);
+                                    listView.getSelectionModel().clearSelection();
+                                    textField.clear();
+                                })
+                        );
             }
-        }
+
         else
         {
             textField.clear();
@@ -130,44 +153,39 @@ public class HelloController {
             messageLabel.setText("No task selected");
 
         }
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL + "/" + task.getId()))
-                .DELETE()
-                .build();
-        httpClient.sendAsync(httpRequest, HttpResponse.BodyHandlers.ofString())
-                .thenRun(() -> loadTasksFromBackend());
     }
     @FXML
     private void handleGoToEdit() {
+
         Task task = listView.getSelectionModel().getSelectedItem();
-        if(task != null)
-        {
-            String newTask = textField.getText().trim();
-            String encodedTask = URLEncoder.encode(newTask, StandardCharsets.UTF_8);
-            if(!newTask.isEmpty()) {
-               HttpRequest httpRequest = HttpRequest.newBuilder()
-                       .uri(URI.create(API_URL + "/" + task.getId() + "?title=" + encodedTask))
-                       .PUT(HttpRequest.BodyPublishers.noBody())
-                       .build();
-               httpClient.sendAsync(httpRequest, HttpResponse.BodyHandlers.ofString())
-                       .thenRun(() -> loadTasksFromBackend());
-               textField.clear();
-               task.setTitle(newTask);
-               listView.refresh();
-               textField.clear();
-            }
-            else
-            {
-                messageLabel.setStyle("-fx-text-fill: red;");
-                messageLabel.setText("textField is empty");
-            }
-        }
-        else
-        {
-            messageLabel.setStyle("-fx-text-fill: red;");
+
+        if (task == null) {
             messageLabel.setText("List is empty");
+            return;
         }
 
+        String newTask = textField.getText().trim();
+
+        if (newTask.isEmpty()) {
+            messageLabel.setText("textField is empty");
+            return;
+        }
+
+        String encodedTask = URLEncoder.encode(newTask, StandardCharsets.UTF_8);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(API_URL + "/" + task.getId() + "?title=" + encodedTask))
+                .PUT(HttpRequest.BodyPublishers.noBody())
+                .build();
+
+        httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenAccept(response ->
+                        Platform.runLater(() -> {
+                            task.setTitle(newTask);
+                            listView.refresh();
+                            textField.clear();
+                        })
+                );
     }
 
 
