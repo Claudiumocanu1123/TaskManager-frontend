@@ -19,6 +19,11 @@ public class Task {
         this.description = description;
         this.completed = completed;
     }
+    public Task(String title, String description) {
+        this.title = title;
+        this.description = description;
+        this.completed = false;
+    }
     public Long getId() {
         return id;
     }
@@ -48,6 +53,9 @@ public class Task {
     }
     public void setCompletedAt(LocalDateTime completedAt) {
         this.completedAt = completedAt;
+    }
+    public String toString() {
+        return title;
     }
 
 }
