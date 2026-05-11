@@ -50,6 +50,7 @@ public class HelloController {
     @FXML
     private void initialize() {
         listView.setItems(list);
+        listView.setCellFactory(lv->new TaskCell());
         textField.setOnAction(e -> handleGoToTask());
         listView.setOnMouseClicked(event -> {
             if(event.getClickCount() == 2) {

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
@@ -20,11 +19,5 @@
       <Button fx:id="DeleteTaskButton" layoutX="459.0" layoutY="88.0" mnemonicParsing="false" onAction="#handleGoToDelete" prefHeight="39.0" prefWidth="126.0" text="Delete Task" />
       <Label fx:id="messageLabel" layoutX="175.0" layoutY="369.0" prefHeight="18.0" prefWidth="199.0" />
       <Button fx:id="EditTaskButton" layoutX="459.0" layoutY="153.0" mnemonicParsing="false" onAction="#handleGoToEdit" prefHeight="39.0" prefWidth="126.0" text="Edit Task" />
-      <CheckBox fx:id="cb1" layoutX="338.0" layoutY="119.0" mnemonicParsing="false" text="CheckBox" />
-      <CheckBox fx:id="cb2" layoutX="337.0" layoutY="164.0" mnemonicParsing="false" text="CheckBox" />
-      <CheckBox fx:id="cb4" layoutX="337.0" layoutY="247.0" mnemonicParsing="false" text="CheckBox" />
-      <CheckBox fx:id="cb5" layoutX="337.0" layoutY="295.0" mnemonicParsing="false" text="CheckBox" />
-      <CheckBox fx:id="cb6" layoutX="337.0" layoutY="328.0" mnemonicParsing="false" text="CheckBox" />
-      <CheckBox fx:id="cb3" layoutX="338.0" layoutY="200.0" mnemonicParsing="false" text="CheckBox" />
    </children>
 </AnchorPane>

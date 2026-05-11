@@ -4,6 +4,7 @@ module com.claudiu.taskmanager.taskmanagerjavafx {
     requires java.net.http;
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.datatype.jsr310;
+    requires javafx.graphics;
 
 
     opens com.claudiu.taskmanager.taskmanagerjavafx to javafx.fxml;
