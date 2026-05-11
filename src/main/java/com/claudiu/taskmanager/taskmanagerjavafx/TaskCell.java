@@ -23,7 +23,7 @@ public class TaskCell extends ListCell<Task> {
             setText(null);
             return;
         }
-        checkBox.setText(task.getTitle());
+        checkBox.setText(task.getTitle() + " - " + task.getDescription());
         checkBox.setSelected(task.isCompleted());
         if(task.isCompleted()) {
             checkBox.setStyle("-fx-text-fill: #888888; -fx-strikethrough: true;");

@@ -31,18 +31,7 @@ public class HelloController {
     @FXML
     private Button EditTaskButton;
     @FXML
-    private CheckBox cb1;
-    @FXML
-    private CheckBox cb2;
-    @FXML
-    private CheckBox cb3;
-    @FXML
-    private CheckBox cb4;
-    @FXML
-    private CheckBox cb5;
-    @FXML
-    private CheckBox cb6;
-
+    private TextArea descriptionArea;
     private ObservableList<Task> list = FXCollections.observableArrayList();
     private HttpClient httpClient = HttpClient.newHttpClient();
     private static final String API_URL = "http://localhost:8080/api/tasks";
@@ -60,6 +49,7 @@ public class HelloController {
         listView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue != null) {
                 textField.setText(newValue.getTitle());
+                descriptionArea.setText(newValue.getDescription());
             }
         });
         DeleteTaskButton.disableProperty().bind(
@@ -100,20 +90,22 @@ public class HelloController {
     @FXML
     private void handleGoToTask() {
         String task = textField.getText().trim();
-        String title = textField.getText();
-        String encodedTitle = URLEncoder.encode(title, StandardCharsets.UTF_8);
-        if(task.isEmpty())
+
+        String description = descriptionArea.getText();
+        String encodedTitle = URLEncoder.encode(task, StandardCharsets.UTF_8);
+        String encodedDescription = URLEncoder.encode(description, StandardCharsets.UTF_8);
+        if(task.isEmpty()) {
             return;
-        if(!task.isEmpty()) {
-            list.add(new Task(title,""));
+        }
             textField.clear();
+            descriptionArea.clear();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(API_URL + "?title=" + encodedTitle))
+                    .uri(URI.create(API_URL + "?title=" + encodedTitle + "&description=" + encodedDescription))
                     .POST(HttpRequest.BodyPublishers.noBody())
                     .build();
             httpClient.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                     .thenRun(() -> loadTasksFromBackend());
-        }
+
     }
     @FXML
     private void handleGoToDelete() {
@@ -159,23 +151,21 @@ public class HelloController {
     private void handleGoToEdit() {
 
         Task task = listView.getSelectionModel().getSelectedItem();
-
         if (task == null) {
             messageLabel.setText("List is empty");
             return;
         }
-
         String newTask = textField.getText().trim();
-
+        String description = descriptionArea.getText().trim();
         if (newTask.isEmpty()) {
             messageLabel.setText("textField is empty");
             return;
         }
 
         String encodedTask = URLEncoder.encode(newTask, StandardCharsets.UTF_8);
-
+        String encodedDescription = URLEncoder.encode(description, StandardCharsets.UTF_8);
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL + "/" + task.getId() + "?title=" + encodedTask))
+                .uri(URI.create(API_URL + "/" + task.getId() + "?title=" + encodedTask + "&description=" + encodedDescription))
                 .PUT(HttpRequest.BodyPublishers.noBody())
                 .build();
 
