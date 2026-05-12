@@ -1,66 +1,56 @@
-# Task Manager Frontend
+# TaskManager Pro - Backend
 
-Frontend pentru aplicația Task Manager.
-Interfață simplă pentru gestionarea task-urilor, conectată la backend-ul construit cu Spring Boot.
+Backend REST API for the TaskManager Pro application built with Spring Boot.
 
-## Features
+## Overview
 
-* afișare listă de task-uri
-* adăugare task nou
-* editare task
-* ștergere task
-* interfață clean și ușor de folosit
+TaskManager Pro is a task management application that allows users to create, update, delete, and manage tasks efficiently through a RESTful API.
 
-## Tech Stack
-
-* JavaFX
-* Java
-* REST API (pentru comunicarea cu backend-ul)
-
-## Cum rulezi proiectul
-
-1. Clonează repo-ul:
-
-```id="c9q2x1"
-git clone https://github.com/claudiumocanu1123/TaskManager-frontend.git
-```
-
-2. Deschide proiectul în IntelliJ IDEA (sau alt IDE)
-
-3. Rulează aplicația din clasa principală (ex: `Main.java`)
-
-## Conectare la backend
-
-Asigură-te că backend-ul rulează pe:
-
-```id="p1z8ra"
-http://localhost:8080
-```
-
-Endpoint folosit:
-
-```id="y6w0dl"
-/api/tasks
-```
-
-Dacă schimbi portul sau URL-ul, modifică request-urile din cod.
-
-## Structura proiectului
-
-* `view` – interfața (FXML)
-* `controller` – logica UI
-* `service` – apeluri către backend
-* `model` – structura datelor
-
-## Notes
-
-Proiectul este în dezvoltare. Posibile îmbunătățiri:
-
-* design mai modern (CSS)
-* validare input
-* gestionare erori mai bună
-* suport pentru autentificare
+This backend handles:
+- Task CRUD operations
+- REST API communication
+- JSON serialization/deserialization
+- Data persistence
+- Client-server interaction
 
 ---
 
-Scopul principal al proiectului este să exersez conectarea unui UI la un backend REST și organizarea codului într-un mod clar.
+## Features
+
+- Create new tasks
+- Update existing tasks
+- Delete tasks
+- Retrieve all tasks
+- Retrieve task by ID
+- RESTful API architecture
+- JSON request/response handling
+- Maven project structure
+- Clean layered architecture
+
+---
+
+## Technologies Used
+
+- Java
+- Spring Boot
+- Maven
+- Jackson
+- REST API
+- HTTP Client
+- IntelliJ IDEA
+
+---
+
+## Project Structure
+
+```text
+src/
+ ├── main/
+ │   ├── java/
+ │   │    └── com/taskmanager/
+ │   │          ├── controller/
+ │   │          ├── model/
+ │   │          ├── service/
+ │   │          └── repository/
+ │   └── resources/
+ │         └── application.properties
